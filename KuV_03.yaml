@@ -1,0 +1,250 @@
+# Ver.1.03
+# Änderungen (Ver.1.03):
+# - Zwischenabrechnung alle 15 Minuten (Tibber-Preisintervall) statt stündlich
+# - Wirkungslosen 23:59:45-Trigger entfernt; time_pattern-Trigger statt Template
+# - Benachrichtigung: target/data der Aktion bleiben erhalten, message/title werden ergänzt
+# - Fehlerhafte Anführungszeichen in der Nachricht entfernt; Ausgabe: Euro 2, kWh 3 Nachkommastellen
+# - Sensorwerte werden geprüft (unavailable/unknown), negative Deltas (Zähler-Reset) abgefangen
+# - Option 3 rechnet mit dem Preis des letzten Abschnitts (preis_start)
+# - Boolean wird vor der Benachrichtigung zurückgesetzt, mode: queued
+# - Neue Syntax (triggers/conditions/actions/action)
+# Hinweis: Preis-Helfer benötigt ausreichend großes max (Standard 100).
+blueprint:
+  name: Energieverbraucher Kosten und Verbrauch
+  description: "Notify über die Kosten und den Verbrauch für einen Durchgang. Variabler Strompreis (alle 15 Minuten) wird berücksichtigt.
+      Es müssen diverse Helfer erstellt werden. Diese müssen vor der Benutzung der Blaupause angelegt werden!! Nach folgendem Schema:
+      input_boolean.Gerätename_boolean  wenn kein Schalter vorhanden z.B. bei Benutzung der Blaupause `Appliance has finished`
+      input_boolean.Gerätename_options_boolean
+      input_number.Gerätename_energie_start
+      input_number.Gerätename_preis_start
+      input_number.Gerätename_energie_zwischen
+      input_number.Gerätename_preis_zwischen"
+  domain: automation
+
+  input:
+    device_name:
+      name: Gerätename
+      description: "Name des Energieverbrauchers (z.B. Geschirrspüler). Bitte keine Umlaute!!"
+      selector:
+        text:
+
+    switch_entity:
+      name: Schalter Entität
+      description: "Entität des Schalters für den Energieverbraucher, ansonsten den ersten Helfer aus der oberen Beschreibung erstellen. Und hier eintragen!!"
+      selector:
+        entity:
+          domain: input_boolean
+
+    options_boolean:
+      name: input_boolean.Gerätename_options_boolean
+      description: "Entität des Schalters für den Helfer"
+      selector:
+        entity:
+          domain: input_boolean
+
+    energy_start_input_number:
+      name: input_number.Gerätename_energie_start
+      description: "Entität des Helfers"
+      selector:
+        entity:
+          domain: input_number
+
+    price_start_input_number:
+      name: input_number.Gerätename_preis_start
+      description: "Entität des Helfers"
+      selector:
+        entity:
+          domain: input_number
+
+    energy_between_input_number:
+      name: input_number.Gerätename_energie_zwischen
+      description: "Entität des Helfers"
+      selector:
+        entity:
+          domain: input_number
+
+    price_between_input_number:
+      name: input_number.Gerätename_preis_zwischen
+      description: "Entität des Helfers"
+      selector:
+        entity:
+          domain: input_number
+
+    energy_sensor:
+      name: Energie Sensor
+      description: "Sensor für den Energieverbrauch des Geräts (Wh oder kWh). Bei Shelly z.B. energy"
+      selector:
+        entity:
+          domain: sensor
+
+    price_sensor:
+      name: Strompreis Sensor
+      description: "Sensor für den aktuellen Strompreis. Bei Tibber z.B. electricity_price"
+      selector:
+        entity:
+          domain: sensor
+
+    action_note:
+      name: Benachrichtigung
+      description: "Aktion(en) am Ende der Automation. title und message werden von der Automation in data ergänzt (z.B. notify.mobile_app_xyz). Vorhandenes target/data bleibt erhalten."
+      selector:
+        action: {}
+
+variables:
+  energy_sensor_id: !input energy_sensor
+  price_sensor_id: !input price_sensor
+  energy_start_id: !input energy_start_input_number
+  price_start_id: !input price_start_input_number
+  energy_between_id: !input energy_between_input_number
+  price_between_id: !input price_between_input_number
+  device_title: !input device_name
+  notify_action: !input action_note
+  # nur aktivierte Aktionen mit Schlüssel 'action'
+  notify_enabled: >-
+    {{ notify_action | rejectattr('enabled', 'eq', false) | selectattr('action', 'defined') | list }}
+  energie_start: "{{ states(energy_start_id) | float(0) }}"
+  preis_start: "{{ states(price_start_id) | float(0) }}"
+  unitm: "{{ 1000 if state_attr(energy_sensor_id, 'unit_of_measurement') == 'Wh' else 1 }}"
+  sensors_ok: "{{ has_value(energy_sensor_id) and has_value(price_sensor_id) }}"
+
+trigger_variables:
+  switch_sensor: !input switch_entity
+  options_boolean_id: !input options_boolean
+
+triggers:
+  # Option 1: Start
+  - trigger: template
+    value_template: "{{ is_state(options_boolean_id, 'off') and is_state(switch_sensor, 'on') }}"
+    id: "option1"
+  # Option 2: Zwischenabrechnung alle 15 Minuten
+  - trigger: time_pattern
+    minutes: "/15"
+    seconds: 0
+    id: "option2"
+  # Option 3: Ende
+  - trigger: template
+    value_template: "{{ is_state(options_boolean_id, 'on') and is_state(switch_sensor, 'off') }}"
+    id: "option3"
+
+conditions:
+  # Start und Zwischenabrechnung nur bei gültigen Sensoren; Ende läuft immer
+  - condition: or
+    conditions:
+      - condition: trigger
+        id: "option3"
+      - "{{ sensors_ok }}"
+  # Zwischenabrechnung nur während eines Durchgangs
+  - condition: or
+    conditions:
+      - condition: not
+        conditions:
+          - condition: trigger
+            id: "option2"
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: !input switch_entity
+            state: "on"
+          - condition: state
+            entity_id: !input options_boolean
+            state: "on"
+
+actions:
+  - choose:
+      # Option 1
+      - conditions:
+          - condition: trigger
+            id: "option1"
+        sequence:
+          - action: input_number.set_value
+            target:
+              entity_id: !input energy_start_input_number
+            data:
+              value: "{{ states(energy_sensor_id) | float(0) / unitm }}"
+          - action: input_number.set_value
+            target:
+              entity_id: !input price_start_input_number
+            data:
+              value: "{{ states(price_sensor_id) | float(0) }}"
+          - action: input_number.set_value
+            target:
+              entity_id: !input energy_between_input_number
+            data:
+              value: 0
+          - action: input_number.set_value
+            target:
+              entity_id: !input price_between_input_number
+            data:
+              value: 0
+          - action: input_boolean.turn_on
+            target:
+              entity_id: !input options_boolean
+
+      # Option 2
+      - conditions:
+          - condition: trigger
+            id: "option2"
+        sequence:
+          # Preissensor kann zum Intervallwechsel kurz verzögert aktualisieren
+          - delay: 5
+          - variables:
+              energie_jetzt: "{{ states(energy_sensor_id) | float(0) / unitm }}"
+              preis_jetzt: "{{ states(price_sensor_id) | float(0) }}"
+              energiezw2: "{{ [energie_jetzt - energie_start, 0] | max }}"
+          - action: input_number.set_value
+            target:
+              entity_id: !input price_between_input_number
+            data:
+              value: "{{ states(price_between_id) | float(0) + energiezw2 * preis_start }}"
+          - action: input_number.set_value
+            target:
+              entity_id: !input energy_between_input_number
+            data:
+              value: "{{ states(energy_between_id) | float(0) + energiezw2 }}"
+          - action: input_number.set_value
+            target:
+              entity_id: !input energy_start_input_number
+            data:
+              value: "{{ energie_jetzt }}"
+          - action: input_number.set_value
+            target:
+              entity_id: !input price_start_input_number
+            data:
+              value: "{{ preis_jetzt }}"
+
+      # Option 3
+      - conditions:
+          - condition: trigger
+            id: "option3"
+        sequence:
+          - variables:
+              energie_end: "{{ states(energy_sensor_id) | float(0) / unitm if has_value(energy_sensor_id) else energie_start }}"
+              energiezw3: "{{ [energie_end - energie_start, 0] | max }}"
+              energie_zwischen: "{{ states(energy_between_id) | float(0) + energiezw3 }}"
+              preis_zwischen: "{{ states(price_between_id) | float(0) + energiezw3 * preis_start }}"
+          - action: input_number.set_value
+            target:
+              entity_id: !input energy_between_input_number
+            data:
+              value: "{{ energie_zwischen }}"
+          - action: input_number.set_value
+            target:
+              entity_id: !input price_between_input_number
+            data:
+              value: "{{ preis_zwischen }}"
+          # Boolean zuerst zurücksetzen, damit ein Fehler bei der Benachrichtigung den Zustand nicht blockiert
+          - action: input_boolean.turn_off
+            target:
+              entity_id: !input options_boolean
+          - repeat:
+              for_each: "{{ notify_enabled }}"
+              sequence:
+                - action: "{{ repeat.item.action }}"
+                  target: "{{ repeat.item.target | default({}) }}"
+                  data: >-
+                    {{ dict(repeat.item.data | default({}),
+                       title=device_title,
+                       message='Fertig! Die Kosten betragen ' ~ ('%.2f' | format(preis_zwischen) | replace('.', ',')) ~ ' € und der Verbrauch beträgt ' ~ ('%.3f' | format(energie_zwischen) | replace('.', ',')) ~ ' kWh.') }}
+
+mode: queued
+max: 5
