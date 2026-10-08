@@ -1,4 +1,4 @@
-# Ver.1.03
+# Ver.1.03 (Fix: kleine Werte mit Exponent, z.B. 5e-05, brachen den Abschluss mit TypeError)
 # Änderungen (Ver.1.03):
 # - Zwischenabrechnung alle 15 Minuten (Tibber-Preisintervall) statt stündlich
 # - Wirkungslosen 23:59:45-Trigger entfernt; time_pattern-Trigger statt Template
@@ -102,8 +102,9 @@ variables:
   # nur aktivierte Aktionen mit Schlüssel 'action'
   notify_enabled: >-
     {{ notify_action | rejectattr('enabled', 'eq', false) | selectattr('action', 'defined') | list }}
-  energie_start: "{{ states(energy_start_id) | float(0) }}"
-  preis_start: "{{ states(price_start_id) | float(0) }}"
+  # Zahlen fest formatiert (%.6f): HA wertet Werte mit Exponent (z.B. 5e-05) sonst als Text aus
+  energie_start: "{{ '%.6f' | format(states(energy_start_id) | float(0)) }}"
+  preis_start: "{{ '%.6f' | format(states(price_start_id) | float(0)) }}"
   unitm: "{{ 1000 if state_attr(energy_sensor_id, 'unit_of_measurement') == 'Wh' else 1 }}"
   sensors_ok: "{{ has_value(energy_sensor_id) and has_value(price_sensor_id) }}"
 
@@ -188,9 +189,9 @@ actions:
           # Preissensor kann zum Intervallwechsel kurz verzögert aktualisieren
           - delay: 5
           - variables:
-              energie_jetzt: "{{ states(energy_sensor_id) | float(0) / unitm }}"
-              preis_jetzt: "{{ states(price_sensor_id) | float(0) }}"
-              energiezw2: "{{ [energie_jetzt - energie_start, 0] | max }}"
+              energie_jetzt: "{{ '%.6f' | format(states(energy_sensor_id) | float(0) / unitm) }}"
+              preis_jetzt: "{{ '%.6f' | format(states(price_sensor_id) | float(0)) }}"
+              energiezw2: "{{ '%.6f' | format([energie_jetzt - energie_start, 0] | max) }}"
           - action: input_number.set_value
             target:
               entity_id: !input price_between_input_number
@@ -218,10 +219,10 @@ actions:
             id: "option3"
         sequence:
           - variables:
-              energie_end: "{{ states(energy_sensor_id) | float(0) / unitm if has_value(energy_sensor_id) else energie_start }}"
-              energiezw3: "{{ [energie_end - energie_start, 0] | max }}"
-              energie_zwischen: "{{ states(energy_between_id) | float(0) + energiezw3 }}"
-              preis_zwischen: "{{ states(price_between_id) | float(0) + energiezw3 * preis_start }}"
+              energie_end: "{{ '%.6f' | format(states(energy_sensor_id) | float(0) / unitm if has_value(energy_sensor_id) else energie_start) }}"
+              energiezw3: "{{ '%.6f' | format([energie_end - energie_start, 0] | max) }}"
+              energie_zwischen: "{{ '%.6f' | format(states(energy_between_id) | float(0) + energiezw3) }}"
+              preis_zwischen: "{{ '%.6f' | format(states(price_between_id) | float(0) + energiezw3 * preis_start) }}"
           - action: input_number.set_value
             target:
               entity_id: !input energy_between_input_number
