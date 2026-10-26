@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AVIF → JPG</title>
+<style>
+  :root { --bg:#f5f5f7; --card:#fff; --fg:#1d1d1f; --muted:#6e6e73; --accent:#0071e3; --border:#d2d2d7; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#1c1c1e; --card:#2c2c2e; --fg:#f5f5f7; --muted:#a1a1a6; --accent:#0a84ff; --border:#3a3a3c; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, sans-serif; background:var(--bg); color:var(--fg); }
+  main { max-width: 760px; margin: 0 auto; padding: 24px 16px; }
+  h1 { font-size: 1.5rem; margin: 0 0 16px; }
+  #drop { border: 2px dashed var(--border); border-radius: 12px; padding: 40px 16px; text-align: center;
+          background: var(--card); cursor: pointer; transition: border-color .15s; }
+  #drop.over { border-color: var(--accent); }
+  #drop p { margin: 4px 0; color: var(--muted); }
+  .controls { display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin:16px 0; }
+  .controls label { display:flex; align-items:center; gap:8px; }
+  input[type=range] { width: 160px; }
+  button { background: var(--accent); color:#fff; border:0; border-radius:8px; padding:8px 14px; font-size:.95rem; cursor:pointer; }
+  button:disabled { opacity:.5; cursor:default; }
+  button.secondary { background: transparent; color: var(--fg); border:1px solid var(--border); }
+  ul { list-style:none; padding:0; margin:0; display:grid; gap:8px; }
+  li { display:flex; align-items:center; gap:12px; background:var(--card); border:1px solid var(--border);
+       border-radius:10px; padding:8px; }
+  li img { width:56px; height:56px; object-fit:cover; border-radius:6px; background:var(--border); flex-shrink:0; }
+  li .info { flex:1; min-width:0; }
+  li .name { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  li .meta { font-size:.85rem; color:var(--muted); }
+  li .err { color:#e5484d; }
+  a.dl { color: var(--accent); text-decoration:none; font-weight:600; }
+</style>
+</head>
+<body>
+<main>
+  <h1>AVIF → JPG Konverter</h1>
+  <div id="drop">
+    <strong>AVIF-Dateien hierher ziehen</strong>
+    <p>oder klicken zum Auswählen – alles bleibt lokal im Browser</p>
+    <input id="file" type="file" accept=".avif,image/avif" multiple hidden>
+  </div>
+
+  <div class="controls">
+    <label>Qualität <input id="q" type="range" min="10" max="100" value="90"> <span id="qv">90</span>%</label>
+    <button id="all" disabled>Alle herunterladen</button>
+    <button id="clear" class="secondary" disabled>Liste leeren</button>
+  </div>
+
+  <ul id="list"></ul>
+</main>
+
+<script>
+const drop = document.getElementById('drop');
+const input = document.getElementById('file');
+const q = document.getElementById('q');
+const qv = document.getElementById('qv');
+const list = document.getElementById('list');
+const btnAll = document.getElementById('all');
+const btnClear = document.getElementById('clear');
+let items = []; // { file, li, url }
+
+const fmt = b => b < 1024*1024 ? (b/1024).toFixed(0) + ' KB' : (b/1024/1024).toFixed(2) + ' MB';
+const jpgName = n => n.replace(/\.avif$/i, '') + '.jpg';
+
+drop.onclick = () => input.click();
+input.onchange = () => { addFiles(input.files); input.value = ''; };
+['dragenter','dragover'].forEach(e => drop.addEventListener(e, ev => { ev.preventDefault(); drop.classList.add('over'); }));
+['dragleave','drop'].forEach(e => drop.addEventListener(e, ev => { ev.preventDefault(); drop.classList.remove('over'); }));
+drop.addEventListener('drop', ev => addFiles(ev.dataTransfer.files));
+
+q.oninput = () => { qv.textContent = q.value; };
+// Bei Änderung des Reglers alle Dateien neu konvertieren
+q.onchange = () => items.forEach(convert);
+
+btnAll.onclick = async () => {
+  for (const it of items) {
+    if (!it.url) continue;
+    download(it);
+    await new Promise(r => setTimeout(r, 250)); // Browser blockiert sonst Mehrfach-Downloads
+  }
+};
+btnClear.onclick = () => {
+  items.forEach(it => it.url && URL.revokeObjectURL(it.url));
+  items = []; list.innerHTML = ''; updateButtons();
+};
+
+function addFiles(files) {
+  for (const file of files) {
+    const li = document.createElement('li');
+    li.innerHTML = '<img alt=""><div class="info"><div class="name"></div><div class="meta">Konvertiere …</div></div>';
+    li.querySelector('.name').textContent = jpgName(file.name);
+    list.appendChild(li);
+    const it = { file, li, url: null };
+    items.push(it);
+    convert(it);
+  }
+  updateButtons();
+}
+
+async function convert(it) {
+  const meta = it.li.querySelector('.meta');
+  meta.className = 'meta'; meta.textContent = 'Konvertiere …';
+  try {
+    const bmp = await createImageBitmap(it.file);
+    const c = document.createElement('canvas');
+    c.width = bmp.width; c.height = bmp.height;
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = '#fff'; // JPG kennt keine Transparenz
+    ctx.fillRect(0, 0, c.width, c.height);
+    ctx.drawImage(bmp, 0, 0);
+    bmp.close();
+    const blob = await new Promise(r => c.toBlob(r, 'image/jpeg', q.value / 100));
+    if (it.url) URL.revokeObjectURL(it.url);
+    it.url = URL.createObjectURL(blob);
+    it.li.querySelector('img').src = it.url;
+    meta.innerHTML = '';
+    meta.append(`${c.width}×${c.height} · ${fmt(it.file.size)} → ${fmt(blob.size)} · `);
+    const a = document.createElement('a');
+    a.className = 'dl'; a.href = it.url; a.download = jpgName(it.file.name); a.textContent = 'Download';
+    meta.append(a);
+  } catch (e) {
+    it.url = null;
+    meta.className = 'meta err';
+    meta.textContent = 'Fehler: Datei konnte nicht gelesen werden (Browser unterstützt AVIF?)';
+  }
+  updateButtons();
+}
+
+function download(it) {
+  const a = document.createElement('a');
+  a.href = it.url; a.download = jpgName(it.file.name);
+  document.body.appendChild(a); a.click(); a.remove();
+}
+
+function updateButtons() {
+  btnAll.disabled = !items.some(it => it.url);
+  btnClear.disabled = items.length === 0;
+}
+</script>
+</body>
+</html>
