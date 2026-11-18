@@ -31,6 +31,16 @@ Nur Home Assistant (über den ha02-MCP-Server) und dieses Repo. Nichts an svendo
 - SmartThings-Integration einmal neu geladen (Waschmaschine lieferte keine Daten).
 - Backup vor der Registry-Bereinigung: `faad56a3`.
 
+## Nachtrag November 2026
+- Dashboards bereinigt: Infos, Verbrauch Haus, Küche-Tab, E3DC (`light.led_strip_jungs` -> `light.led_stripe_jungs`), Geraete an, Weihnachten.
+- Farbige Badges (grün/gelb/rot + grau bei unavailable) für PM10, PM2.5 und CO2 auf Test01 und Räume.
+  Grenzwerte: PM10 25/50, PM2.5 15/35, CO2 800/1200. CO2-Quelle: `sensor.meter_pro_co2_monitor_bt_kohlendioxid`.
+- Test01, Karte "Strompreise (Heute & Morgen)": `config-template-card`-Umweg entfernt (Jinja wurde als JS ausgewertet),
+  jetzt reine `apexcharts-card` mit `yaxis.min` als EVAL-Funktion.
+- Alte KuV-02-Automationen gelöscht (Geschirrspüler, Waschmaschine, Trockner, Backofen).
+- Shelly 1 Mini G3 "Schalter Kinderzimmer links": Automation von einer anderen Sitzung angelegt;
+  Ziel auf `light.madchenzimmer` umgestellt, doppelte Gruppe `light.maedchenzimmer_kinderzimmer_links` gelöscht.
+
 ## Offen
 - Shelly 1 Mini Gen3 für `light.madchenzimmer` (Automation folgt nach Einbau).
 - Dashboards: Infos, Verbrauch Haus, Küche-Tab, E3DC, Geraete an, Weihnachten, Rest von Test01.
