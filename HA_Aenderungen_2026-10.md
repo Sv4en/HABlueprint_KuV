@@ -62,6 +62,11 @@ Nur Home Assistant (über den ha02-MCP-Server) und dieses Repo. Nichts an svendo
   `automation.s10e_esperre_aus_twizy` -> `automation.s10e_esperre_aus_trockner` („S10E Esperre AUS Trockner“).
   Die S10e-Karte auf Test01 (Ansicht „E3DC INFO 3“) wurde auf die neuen Entity-IDs umgestellt.
 
+- Waschmaschinen-Badge zeigt jetzt `sensor.waschmaschine_washer_job_state` (Programmschritt + „seit“).
+- Geschirrspüler: gleiche Badges wie Waschmaschine/Trockner.
+  Neuer Helfer `input_boolean.geschirrspuler_fertig_hinweis`, neue Automation „Geschirrspüler Fertig-Hinweis“.
+  Lauf-Signal ist `input_boolean.geschirrspueler_boolean`.
+
 ## Offen
 - Shelly 1 Mini Gen3 für `light.madchenzimmer` (Automation folgt nach Einbau).
 - Dashboards: Infos, Verbrauch Haus, Küche-Tab, E3DC, Geraete an, Weihnachten, Rest von Test01.
