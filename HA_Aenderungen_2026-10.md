@@ -41,6 +41,14 @@ Nur Home Assistant (über den ha02-MCP-Server) und dieses Repo. Nichts an svendo
 - Shelly 1 Mini G3 "Schalter Kinderzimmer links": Automation von einer anderen Sitzung angelegt;
   Ziel auf `light.madchenzimmer` umgestellt, doppelte Gruppe `light.maedchenzimmer_kinderzimmer_links` gelöscht.
 
+- Test01: Status-Badges für Waschmaschine und Trockner.
+  Gelb = läuft (`input_boolean.waschmaschine_boolean` / `input_boolean.trockner_boolean`),
+  Rot = fertig und noch nicht quittiert (neue Helfer `*_fertig_hinweis`), sonst unsichtbar.
+  Rotes Badge anklicken quittiert; sonst erlischt es nach 6 h oder beim nächsten Start.
+  Neue Automationen: „Waschmaschine Fertig-Hinweis“, „Trockner Fertig-Hinweis“.
+- Hinweis von der ebusd-Sitzung: WW-Speichertemperatur ist jetzt `sensor.warmwasser_speicher_temperatur`.
+  Der Cloud-Sensor `sensor.zu_hause_domestic_hot_water_0_tank_temperature` wird nicht mehr verwendet.
+
 ## Offen
 - Shelly 1 Mini Gen3 für `light.madchenzimmer` (Automation folgt nach Einbau).
 - Dashboards: Infos, Verbrauch Haus, Küche-Tab, E3DC, Geraete an, Weihnachten, Rest von Test01.
