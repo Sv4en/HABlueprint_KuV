@@ -49,6 +49,14 @@ Nur Home Assistant (über den ha02-MCP-Server) und dieses Repo. Nichts an svendo
 - Hinweis von der ebusd-Sitzung: WW-Speichertemperatur ist jetzt `sensor.warmwasser_speicher_temperatur`.
   Der Cloud-Sensor `sensor.zu_hause_domestic_hot_water_0_tank_temperature` wird nicht mehr verwendet.
 
+- Twizy (verkauft) vollständig entfernt: 5 Automationen (KuV, Appliance has finished, kosten,
+  Zeitsteuerung, 13-Uhr-Laden), 9 Helfer (2 Booleans, 13-Uhr-Boolean, 4 KuV-input_number,
+  Zeitschalter, Template-Sensor „Twizy_letzte_Ladung“) und alle Dashboard-Karten
+  (Räume Home, Infos Ansicht „Twizy“ + Home-Karte, Test01 Ansicht „Autos“).
+  Behalten: `automation.s10e_esperre_twizy` und `automation.s10e_esperre_aus_twizy`.
+  Backup davor: `996d86d2`.
+- Der Plug `plug_16a` (jetzt „Zigbee_03“) gehört nicht mehr zum Twizy, sondern misst den Trockner.
+
 ## Offen
 - Shelly 1 Mini Gen3 für `light.madchenzimmer` (Automation folgt nach Einbau).
 - Dashboards: Infos, Verbrauch Haus, Küche-Tab, E3DC, Geraete an, Weihnachten, Rest von Test01.
