@@ -57,6 +57,11 @@ Nur Home Assistant (über den ha02-MCP-Server) und dieses Repo. Nichts an svendo
   Backup davor: `996d86d2`.
 - Der Plug `plug_16a` (jetzt „Zigbee_03“) gehört nicht mehr zum Twizy, sondern misst den Trockner.
 
+- Die beiden behaltenen Automationen umbenannt (sie messen jetzt den Trockner, nicht mehr den Twizy):
+  `automation.s10e_esperre_twizy` -> `automation.s10e_esperre_ein_trockner` („S10E ESperre EIN Trockner“),
+  `automation.s10e_esperre_aus_twizy` -> `automation.s10e_esperre_aus_trockner` („S10E Esperre AUS Trockner“).
+  Die S10e-Karte auf Test01 (Ansicht „E3DC INFO 3“) wurde auf die neuen Entity-IDs umgestellt.
+
 ## Offen
 - Shelly 1 Mini Gen3 für `light.madchenzimmer` (Automation folgt nach Einbau).
 - Dashboards: Infos, Verbrauch Haus, Küche-Tab, E3DC, Geraete an, Weihnachten, Rest von Test01.
