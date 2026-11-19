@@ -67,6 +67,11 @@ Nur Home Assistant (über den ha02-MCP-Server) und dieses Repo. Nichts an svendo
   Neuer Helfer `input_boolean.geschirrspuler_fertig_hinweis`, neue Automation „Geschirrspüler Fertig-Hinweis“.
   Lauf-Signal ist `input_boolean.geschirrspueler_boolean`.
 
+- Geschirrspüler-Matter-Duplikate entfernt: 27 tote Entitäten (24 Registry-Waisen plus 3 Reste
+  eines alten Matter-Knotens). Übrig bleiben die 6 aktiven `*_3`-Entitäten
+  (Schalter, Leistung, Spannung, Wirkstrom, Energie, Identifizieren).
+  Backup davor: `996d86d2`.
+
 ## Offen
 - Shelly 1 Mini Gen3 für `light.madchenzimmer` (Automation folgt nach Einbau).
 - Dashboards: Infos, Verbrauch Haus, Küche-Tab, E3DC, Geraete an, Weihnachten, Rest von Test01.
