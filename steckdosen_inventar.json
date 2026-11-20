@@ -1,0 +1,326 @@
+{
+  "stand": "2026-11-20",
+  "quelle": "Home Assistant (ha02)",
+  "hinweis": "zweck und name_neu sind zum Ausfuellen gedacht. code = Kurzcode fuer den Aufkleber.",
+  "steckdosen": [
+    {
+      "code": "EC26",
+      "hersteller": "SwitchBot",
+      "modell": "Plug Mini (EU)",
+      "protokoll": "Bluetooth + Cloud",
+      "adresse": "90:E5:B1:39:EC:26",
+      "bereich": "Waschküche UG",
+      "status": "on",
+      "entities": [
+        "switch.plug_switchbot_01_bt (BT)",
+        "switch.plug_switchbot_01_cl (Cloud)"
+      ],
+      "name_alt": "plug-switchbot-01-BT / -CL",
+      "zweck": "",
+      "name_neu": ""
+    },
+    {
+      "code": "D9E6",
+      "hersteller": "SwitchBot",
+      "modell": "Plug Mini (EU)",
+      "protokoll": "Bluetooth + Cloud",
+      "adresse": "90:E5:B1:66:D9:E6",
+      "bereich": "Wohnzimmer",
+      "status": "off",
+      "entities": [
+        "switch.plug_mini_eu_d9e6 (BT)",
+        "switch.plug_e6 (Cloud)"
+      ],
+      "name_alt": "Plug Mini (EU) D9E6 / plug E6",
+      "zweck": "",
+      "name_neu": ""
+    },
+    {
+      "code": "ED7E",
+      "hersteller": "SwitchBot",
+      "modell": "Plug Mini (EU)",
+      "protokoll": "Bluetooth + Cloud",
+      "adresse": "90:E5:B1:68:ED:7E",
+      "bereich": "Wohnzimmer",
+      "status": "off",
+      "entities": [
+        "switch.plug_mini_eu_ed7e (BT)",
+        "switch.plug_7e (Cloud)"
+      ],
+      "name_alt": "Plug Mini (EU) ED7E / plug 7E",
+      "zweck": "",
+      "name_neu": ""
+    },
+    {
+      "code": "95FA",
+      "hersteller": "SwitchBot",
+      "modell": "Plug Mini (EU)",
+      "protokoll": "Bluetooth + Cloud",
+      "adresse": "90:E5:B1:67:95:FA",
+      "bereich": "Waschküche UG",
+      "status": "on",
+      "entities": [
+        "switch.plug_mini_eu_95fa (BT)",
+        "switch.plug_fa (Cloud)"
+      ],
+      "name_alt": "Plug Mini (EU) 95FA / Plug FA",
+      "zweck": "",
+      "name_neu": ""
+    },
+    {
+      "code": "M-0D",
+      "hersteller": "SwitchBot",
+      "modell": "Plug Mini EU",
+      "protokoll": "Matter",
+      "adresse": "Node 000000000000000D",
+      "bereich": "",
+      "status": "unavailable",
+      "entities": [
+        "switch.weihnacht_plug_03"
+      ],
+      "name_alt": "Plug Mini EU",
+      "zweck": "",
+      "name_neu": ""
+    },
+    {
+      "code": "M-0E",
+      "hersteller": "SwitchBot",
+      "modell": "Plug Mini EU",
+      "protokoll": "Matter",
+      "adresse": "Node 000000000000000E",
+      "bereich": "",
+      "status": "unavailable",
+      "entities": [
+        "switch.weihnacht_plug_03_2"
+      ],
+      "name_alt": "Plug Mini EU",
+      "zweck": "",
+      "name_neu": ""
+    },
+    {
+      "code": "M-0F",
+      "hersteller": "SwitchBot",
+      "modell": "Plug Mini EU",
+      "protokoll": "Matter",
+      "adresse": "Node 000000000000000F",
+      "bereich": "",
+      "status": "unavailable",
+      "entities": [
+        "switch.plug_mini_eu"
+      ],
+      "name_alt": "Plug Mini EU",
+      "zweck": "",
+      "name_neu": ""
+    },
+    {
+      "code": "M-10",
+      "hersteller": "SwitchBot",
+      "modell": "Plug Mini EU",
+      "protokoll": "Matter",
+      "adresse": "Node 0000000000000010",
+      "bereich": "",
+      "status": "unavailable",
+      "entities": [
+        "switch.plug_mini_eu_2"
+      ],
+      "name_alt": "Plug Mini EU",
+      "zweck": "",
+      "name_neu": ""
+    },
+    {
+      "code": "M-12",
+      "hersteller": "SwitchBot",
+      "modell": "Plug Mini EU",
+      "protokoll": "Matter",
+      "adresse": "Node 0000000000000012",
+      "bereich": "",
+      "status": "on",
+      "entities": [
+        "switch.plug_mini_eu_3"
+      ],
+      "name_alt": "Plug Mini EU",
+      "zweck": "",
+      "name_neu": ""
+    },
+    {
+      "code": "9D76",
+      "hersteller": "Meross",
+      "modell": "mss315-eu (16 A, Messung)",
+      "protokoll": "WLAN lokal",
+      "adresse": "48:E1:E9:CE:9D:76",
+      "bereich": "Küche",
+      "status": "on",
+      "entities": [
+        "switch.smart_switch_2307065985885251080248e1e9ce9d76_outlet"
+      ],
+      "name_alt": "Backofen Schalter",
+      "zweck": "Backofen",
+      "name_neu": ""
+    },
+    {
+      "code": "AF02",
+      "hersteller": "Meross",
+      "modell": "mss315-eu (16 A, Messung)",
+      "protokoll": "WLAN lokal",
+      "adresse": "48:E1:E9:CE:AF:02",
+      "bereich": "Waschküche UG",
+      "status": "on",
+      "entities": [
+        "switch.smart_switch_2307061446916551080248e1e9ceaf02_outlet"
+      ],
+      "name_alt": "Meross Plug 01",
+      "zweck": "",
+      "name_neu": ""
+    },
+    {
+      "code": "6631",
+      "hersteller": "Meross",
+      "modell": "Smart Plug Mini",
+      "protokoll": "Matter",
+      "adresse": "Serie 510802230706631",
+      "bereich": "Küche",
+      "status": "on",
+      "entities": [
+        "switch.geschirrspuler_matter_01_3"
+      ],
+      "name_alt": "Geschirrspüler Matter 01",
+      "zweck": "Geschirrspüler",
+      "name_neu": ""
+    },
+    {
+      "code": "SXG",
+      "hersteller": "Tuya",
+      "modell": "EU02A-5G",
+      "protokoll": "WLAN lokal (LocalTuya)",
+      "adresse": "bf71fda3a092c0d1ccasxg",
+      "bereich": "Heizungsraum UG",
+      "status": "off",
+      "entities": [
+        "switch.wlan_plug_01_switch_1"
+      ],
+      "name_alt": "tuya 5G Plug 01",
+      "zweck": "",
+      "name_neu": ""
+    },
+    {
+      "code": "YZV",
+      "hersteller": "Tuya",
+      "modell": "EU02A-5G",
+      "protokoll": "WLAN lokal (LocalTuya)",
+      "adresse": "bf5afe5b95dfa84c45cyzv",
+      "bereich": "Küche",
+      "status": "on",
+      "entities": [
+        "switch.5g_wlan_plug_02_switch_1"
+      ],
+      "name_alt": "tuya 5G Plug 02 Tablet Küche",
+      "zweck": "Tablet Küche",
+      "name_neu": ""
+    },
+    {
+      "code": "TM4",
+      "hersteller": "Tuya",
+      "modell": "EU02A-5G",
+      "protokoll": "WLAN lokal (LocalTuya)",
+      "adresse": "bf53801e89891d58bcotm4",
+      "bereich": "Küche",
+      "status": "on",
+      "entities": [
+        "switch.5g_wlan_plug_03_switch_1"
+      ],
+      "name_alt": "tuya 5G Plug 03",
+      "zweck": "",
+      "name_neu": ""
+    },
+    {
+      "code": "KFV",
+      "hersteller": "Tuya",
+      "modell": "EU02A-5G",
+      "protokoll": "WLAN lokal (LocalTuya)",
+      "adresse": "bfa5816162fd55ae62pkfv",
+      "bereich": "",
+      "status": "on",
+      "entities": [
+        "switch.5g_wlan_plug_04_switch_1"
+      ],
+      "name_alt": "tuya 5G Plug 04",
+      "zweck": "",
+      "name_neu": ""
+    },
+    {
+      "code": "0D14",
+      "hersteller": "Tuya (TZ3000)",
+      "modell": "TS011F (16 A, Messung)",
+      "protokoll": "Zigbee (ZHA)",
+      "adresse": "a4:c1:38:42:7c:2a:0d:14",
+      "bereich": "Waschküche UG",
+      "status": "on",
+      "entities": [
+        "switch.plug_16a_schalter"
+      ],
+      "name_alt": "Zigbee_03",
+      "zweck": "Trockner",
+      "name_neu": ""
+    },
+    {
+      "code": "AE36",
+      "hersteller": "Tuya (TZ3000)",
+      "modell": "TS011F (16 A, Messung)",
+      "protokoll": "Zigbee (ZHA)",
+      "adresse": "70:b3:d5:2b:60:05:ae:36",
+      "bereich": "Küche",
+      "status": "on",
+      "entities": [
+        "switch.kueche_01_socket_schalter"
+      ],
+      "name_alt": "Zigbee_07",
+      "zweck": "",
+      "name_neu": ""
+    },
+    {
+      "code": "86F7",
+      "hersteller": "Tuya (TZ3000)",
+      "modell": "TS011F (16 A, Messung)",
+      "protokoll": "Zigbee (ZHA)",
+      "adresse": "70:b3:d5:2b:60:05:86:f7",
+      "bereich": "Wohnzimmer",
+      "status": "unavailable",
+      "entities": [
+        "switch.weihnacht_02_socket_schalter"
+      ],
+      "name_alt": "Zigbee_02",
+      "zweck": "Weihnachtsbaum",
+      "name_neu": ""
+    },
+    {
+      "code": "B47D",
+      "hersteller": "Tuya (TZ3000)",
+      "modell": "TS011F (16 A, Messung)",
+      "protokoll": "Zigbee (ZHA)",
+      "adresse": "70:b3:d5:2b:60:07:b4:7d",
+      "bereich": "Heizungsraum UG",
+      "status": "off",
+      "entities": [
+        "switch.zirkulationspumpe_socket_schalter"
+      ],
+      "name_alt": "Zigbee_06",
+      "zweck": "Zirkulationspumpe",
+      "name_neu": ""
+    },
+    {
+      "code": "9FD5",
+      "hersteller": "IKEA",
+      "modell": "TRETAKT Smart plug",
+      "protokoll": "Zigbee (ZHA)",
+      "adresse": "20:a7:16:ff:fe:06:9f:d5",
+      "bereich": "Küche",
+      "status": "unavailable",
+      "entities": [
+        "switch.kueche_ikea_tretakt_plug_01"
+      ],
+      "name_alt": "IKEA TRETAKT plug 01",
+      "zweck": "",
+      "name_neu": ""
+    }
+  ]
+}
