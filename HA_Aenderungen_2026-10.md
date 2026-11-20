@@ -79,6 +79,13 @@ Nur Home Assistant (über den ha02-MCP-Server) und dieses Repo. Nichts an svendo
   Die Automation ruft daher nur noch die Szene auf; der Helfer `input_number.flur_eg_max_helligkeit`
   wurde wieder gelöscht.
 
+- Neue Automation „Batterie-Wächter: Gerät meldet sich nicht“: täglich 09:07 Uhr; meldet per Telegram
+  alle Sensoren mit `device_class: battery`, die seit über 24 h `unavailable`/`unknown` sind.
+  Erster Lauf meldete die beiden toten IKEA-Bewegungsmelder (WC EG, EG/OG).
+- Gruppe 2 geprüft: Flood-Sensor und Bad-Bewegungsmelder laufen wieder, `hue_outdoor_msensor_1`
+  existiert nicht mehr. Tot sind nur „IKEA motion 01“ (WC EG) und „IKEA motion 02“ (EG/OG),
+  beide seit dem Neustart am 17.11. 00:29 Uhr — vermutlich leere Batterien. Keine Automation nutzt sie.
+
 ## Offen
 - Shelly 1 Mini Gen3 für `light.madchenzimmer` (Automation folgt nach Einbau).
 - Dashboards: Infos, Verbrauch Haus, Küche-Tab, E3DC, Geraete an, Weihnachten, Rest von Test01.
