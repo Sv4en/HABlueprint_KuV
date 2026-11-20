@@ -86,6 +86,11 @@ Nur Home Assistant (über den ha02-MCP-Server) und dieses Repo. Nichts an svendo
   existiert nicht mehr. Tot sind nur „IKEA motion 01“ (WC EG) und „IKEA motion 02“ (EG/OG),
   beide seit dem Neustart am 17.11. 00:29 Uhr — vermutlich leere Batterien. Keine Automation nutzt sie.
 
+- SwitchBot-Steckdosen entdoppelt: Cloud- und Matter-Geräte deaktiviert (nicht gelöscht),
+  nur die 4 Bluetooth-Geräte bleiben aktiv (EC26, D9E6, ED7E, 95FA).
+  Deaktiviert: 4x switchbot_cloud, 5x Matter „Plug Mini EU“. Rückgängig über Gerät > Aktivieren.
+- Neues Inventar `steckdosen_inventar.json` als Grundlage für Beschriftung und Umbenennung.
+
 ## Offen
 - Shelly 1 Mini Gen3 für `light.madchenzimmer` (Automation folgt nach Einbau).
 - Dashboards: Infos, Verbrauch Haus, Küche-Tab, E3DC, Geraete an, Weihnachten, Rest von Test01.
