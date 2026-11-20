@@ -75,8 +75,9 @@ Nur Home Assistant (über den ha02-MCP-Server) und dieses Repo. Nichts an svendo
 - Flur EG: neue Automation „Flur EG: Szene Natürliches Licht anwenden“ (Test).
   Beim Einschalten von `light.flur_eg` wird `scene.flur_eg_naturliches_licht` aktiviert und
   danach die Helligkeit auf `input_number.flur_eg_max_helligkeit` begrenzt (Start: 70 %, Wärmeschutz).
-  Hinweis: der `brightness`-Parameter von `hue.activate_scene` wurde von der Bridge ignoriert,
-  deshalb der zusätzliche `light.turn_on`-Schritt.
+  Nachtrag 20.11.: Die 70 % stehen jetzt in der Hue-Szene selbst (in der Hue-App gesetzt).
+  Die Automation ruft daher nur noch die Szene auf; der Helfer `input_number.flur_eg_max_helligkeit`
+  wird nicht mehr verwendet.
 
 ## Offen
 - Shelly 1 Mini Gen3 für `light.madchenzimmer` (Automation folgt nach Einbau).
